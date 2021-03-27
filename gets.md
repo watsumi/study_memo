@@ -22,3 +22,12 @@ input_line = gets.chomp
 input = []
 input_line.to_i.times { input << gets.chomp }
 ```
+
+一行で与えられた数値を、空白で区切って配列として受け取るとき
+```
+30 30 10
+```
+
+```
+input_line = gets.chomp.split('')
+```
