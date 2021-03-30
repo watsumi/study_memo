@@ -41,4 +41,32 @@ pr = Proc.new { break }
 (1..5).each(&pr)
 ```
 
-ブロックをProc.newで
+ブロックをProc.newでProcオブジェクトとした場合、`&`を指定して渡さないとブロックとして動作してくれないために、&を使っているということでした。
+
+[![Image from Gyazo](https://i.gyazo.com/58486adbc773169e17ab0dd762445a13.gif)](https://gyazo.com/58486adbc773169e17ab0dd762445a13)
+
+## :to_iは何をしているのか？
+結論からいうと、Procオブジェクトを自動的に生成し、第一引数を数値に変換しています。    
+ヒントはこちらに。  
+https://docs.ruby-lang.org/ja/latest/method/Symbol/i/to_proc.html
+
+>instance method Symbol#to_proc
+>to_proc -> Proc[permalink][rdoc][edit]
+>self に対応する Proc オブジェクトを返します。
+>生成される Proc オブジェクトを呼びだす(Proc#call)と、 Proc#callの第一引数をレシーバとして、 self という名前のメソッドを残りの引数を渡して呼びだします。
+>生成される Proc オブジェクトは lambda です。
+```
+:object_id.to_proc.lambda? # => true
+```
+明示的に呼ぶ例
+```
+:to_i.to_proc["ff", 16]  # => 255 ← "ff".to_i(16)と同じ
+```
+暗黙に呼ばれる例
+```
+# メソッドに & とともにシンボルを渡すと
+# to_proc が呼ばれて Proc 化され、
+# それがブロックとして渡される。
+(1..3).collect(&:to_s)  # => ["1", "2", "3"]
+(1..3).select(&:odd?)   # => [1, 3]
+```
