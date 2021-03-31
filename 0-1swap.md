@@ -16,11 +16,7 @@ loop do
   diff << num.next - sort_num.next 
 end
 
-if diff.count(0) == len
-  puts :YES
-else
-  puts len - diff.count(0) == 2? :YES: :NO
-end
+puts len - diff.count(0) <= 2? :YES: :NO
 ```
 
 ### to_enum
